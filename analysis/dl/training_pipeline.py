@@ -33,10 +33,16 @@ def train_all_models_core(
     # Print GPU info once at start
     print(f"\n{'=' * 60}")
     print(f"Training [{model_type.upper()}] on: {dl_model.device}")
-    if torch.cuda.is_available():
-        print(f"GPU: {torch.cuda.get_device_name(0)}")
+    if dl_model.device.type == "cuda":
+        device_index = dl_model.device.index if dl_model.device.index is not None else torch.cuda.current_device()
+        print(f"GPU: {torch.cuda.get_device_name(device_index)}")
         print(f"CUDA Version: {torch.version.cuda}")
         print("Mixed Precision: Enabled (AMP)")
+    elif dl_model.device.type == "mps":
+        print("Apple Silicon MPS backend active")
+        print("Mixed Precision: Disabled (AMP is CUDA-only)")
+    else:
+        print("CPU mode active")
     print(f"{'=' * 60}\n")
 
     df = dl_model.load_and_preprocess()

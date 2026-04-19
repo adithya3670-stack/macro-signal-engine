@@ -18,6 +18,7 @@ from torch.utils.data import DataLoader, Dataset
 from analysis.base_model import BaseModel
 from analysis.price_1m_features import Price1MFeatureBuilder
 from analysis.price_3d_models import build_price_model
+from backend.shared.device import resolve_torch_device
 from config.settings import (
     ASSETS,
     HOLDOUT_PRICE_1M_DIR,
@@ -27,7 +28,7 @@ from config.settings import (
 )
 
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+DEVICE = resolve_torch_device()
 
 
 @dataclass

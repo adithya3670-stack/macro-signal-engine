@@ -13,6 +13,7 @@ from sklearn.metrics import f1_score
 from sklearn.preprocessing import MinMaxScaler
 from torch.utils.data import DataLoader
 
+from backend.shared.device import use_amp, use_pin_memory
 from analysis.dl.model_definitions import (
     FocalLoss,
     LSTMAttentionModel,
@@ -26,7 +27,7 @@ def _safe_train_step(model, optimizer, criterion, X_batch, y_batch, device):
     X_batch = X_batch.to(device)
     y_batch = y_batch.to(device)
     optimizer.zero_grad()
-    if torch.cuda.is_available():
+    if use_amp(device):
         with torch.amp.autocast("cuda"):
             out = model(X_batch)
             loss = criterion(out, y_batch)
@@ -176,12 +177,13 @@ def optimize_models_core(
                 y_val = y_final[t_idx:v_idx]
 
                 workers = 0
+                pin_memory = use_pin_memory(dl_model.device)
                 train_loader = DataLoader(
                     TimeSeriesDataset(X_train, y_train),
                     batch_size=p_batch,
                     shuffle=True,
                     num_workers=workers,
-                    pin_memory=True,
+                    pin_memory=pin_memory,
                     persistent_workers=(workers > 0),
                 )
                 val_loader = DataLoader(
@@ -189,7 +191,7 @@ def optimize_models_core(
                     batch_size=p_batch,
                     shuffle=False,
                     num_workers=workers,
-                    pin_memory=True,
+                    pin_memory=pin_memory,
                     persistent_workers=(workers > 0),
                 )
 
@@ -257,7 +259,7 @@ def optimize_models_core(
                 if val_loader:
                     del val_loader
                 gc.collect()
-                if torch.cuda.is_available():
+                if dl_model.device.type == "cuda":
                     torch.cuda.empty_cache()
 
             if best_params:

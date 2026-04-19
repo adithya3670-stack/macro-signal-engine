@@ -98,7 +98,26 @@ Optional expanded stacks:
 - `requirements/train.lock.txt`
 - `requirements/research.lock.txt`
 
-### 4. Provide local datasets (required)
+### 4. Configure training device (optional)
+
+Device selection is portable across users via `MACRO_TORCH_DEVICE`:
+- `auto` (default): use CUDA if available, otherwise fall back to CPU
+- `cpu`: force CPU mode
+- `cuda`: use default CUDA device
+- `cuda:0`, `cuda:1`, ...: choose a specific GPU index
+- `mps`: Apple Silicon Metal backend (if available)
+
+Examples:
+
+```powershell
+$env:MACRO_TORCH_DEVICE="auto"
+# or
+$env:MACRO_TORCH_DEVICE="cuda:0"
+```
+
+If a requested device is unavailable, the runtime safely falls back to CPU.
+
+### 5. Provide local datasets (required)
 
 This repository is **source-only** and does not ship built-in vendor connectors.
 You can connect your own ingestion pipeline from any source you choose (for example
@@ -119,7 +138,7 @@ Notes:
 - If you use third-party providers, make sure your ingestion usage/storage follows their
   terms, licensing, and attribution requirements.
 
-### 5. Configure automation secrets (optional)
+### 6. Configure automation secrets (optional)
 
 Copy the template and set environment variables:
 
@@ -128,7 +147,7 @@ Copy-Item data/automation_config.example.json data/automation_config.json
 $env:MACRO_AUTO_EMAIL_PASSWORD="your-password"
 ```
 
-### 6. Run app
+### 7. Run app
 
 ```powershell
 python app.py

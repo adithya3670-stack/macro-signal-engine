@@ -8,6 +8,7 @@ import torch
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
 from sklearn.utils.class_weight import compute_class_weight
 from torch.utils.data import DataLoader
+from backend.shared.device import use_amp, use_pin_memory
 
 
 def train_model_instance(
@@ -59,26 +60,27 @@ def train_model_instance(
 
     workers = 0
     batch_size = params.get("batch_size", 512)
+    pin_memory = use_pin_memory(device)
 
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        pin_memory=True,
+        pin_memory=pin_memory,
         num_workers=workers,
     )
     val_loader = DataLoader(
         val_dataset,
         batch_size=batch_size,
         shuffle=False,
-        pin_memory=True,
+        pin_memory=pin_memory,
         num_workers=workers,
     )
     test_loader = DataLoader(
         test_dataset,
         batch_size=batch_size,
         shuffle=False,
-        pin_memory=True,
+        pin_memory=pin_memory,
         num_workers=workers,
     )
 
@@ -111,7 +113,7 @@ def train_model_instance(
     criterion = loss_cls(alpha=0.25, gamma=gamma_val)
     optimizer = torch.optim.Adam(model.parameters(), lr=params.get("learning_rate", 0.001))
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min", factor=0.5, patience=5)
-    scaler_amp = torch.amp.GradScaler("cuda") if torch.cuda.is_available() else None
+    scaler_amp = torch.amp.GradScaler("cuda") if use_amp(device) else None
 
     best_loss = float("inf")
     patience = 10 if not force_full_training else 999

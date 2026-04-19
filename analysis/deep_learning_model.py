@@ -1,6 +1,7 @@
 import os
 import json
 import torch
+from backend.shared.device import configure_torch_runtime, resolve_torch_device
 from analysis.dl.model_definitions import (
     FocalLoss,
     LSTMAttentionModel,
@@ -10,11 +11,8 @@ from analysis.dl.model_definitions import (
 )
 
 # Set device
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-if device.type == 'cuda':
-    torch.backends.cudnn.benchmark = True
-    torch.backends.cuda.matmul.allow_tf32 = True # Ampere (RTX 30xx) optimization
-    torch.backends.cudnn.allow_tf32 = True
+device = resolve_torch_device()
+configure_torch_runtime(device)
 
 from config.settings import ENGINEERED_FEATURES_FILE
 from analysis.base_model import BaseModel

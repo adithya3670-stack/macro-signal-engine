@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 import torch
 
+from backend.shared.device import use_amp
+
 
 def predict_latest_by_model(
     *,
@@ -196,7 +198,7 @@ def predict_latest_by_model(
                     model.load_state_dict(torch.load(model_path, map_location=dl_model.device, weights_only=False))
                     model.eval()
                     with torch.no_grad():
-                        if torch.cuda.is_available():
+                        if use_amp(dl_model.device):
                             with torch.amp.autocast("cuda"):
                                 logit = model(X_seq).cpu().item()
                                 probs_list.append(1 / (1 + np.exp(-logit)))
