@@ -31,6 +31,8 @@ The project emphasizes reproducible engineering:
 
 ### 1. Data Management + Historical Trends
 
+![Data Management and Historical Trends](Docs/Images/p1.png)
+
 The Data Collection screen is designed for two ingestion modes:
 - `Update to Latest (Smart)`: append only missing dates to your local history
 - `Reset / Full Download (2008–Present)`: full rebuild mode for clean backfills
@@ -44,6 +46,8 @@ This helps catch bad joins, date gaps, and regime-shift discontinuities early.
 
 ### 2. Fear & Greed, Rates, Inflation, and Labor Panels
 
+![Fear and Greed, Rates, Inflation, and Labor Panels](Docs/Images/p2.png)
+
 The macro dashboard presents grouped mini-panels to quickly sanity-check data health:
 - Fear & Greed proxies: momentum, strength, breadth, options, junk demand, volatility, safe-haven demand
 - Interest rates and curve state: Fed funds, 10Y yield, 10Y-3M spread
@@ -55,6 +59,8 @@ or structurally inconsistent, users should refresh or repair their upstream data
 connector before running feature generation or model training.
 
 ### 3. Feature Engineering Workspace
+
+![Feature Engineering Workspace](Docs/Images/p3.png)
 
 The Feature Engineering screen turns raw macro-market inputs into model-ready signals:
 - `Signal Factory` starts the engineered-feature pipeline
