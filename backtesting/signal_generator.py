@@ -86,7 +86,7 @@ class SignalGenerator:
         Re-implements the deleted 'run_inference_pipeline' logic but cleaner.
         """
         import torch
-        from analysis.deep_learning_model import LSTMAttentionModel, TransformerTimeSeriesModel, NBeatsBlock, NBeatsNet
+        from analysis.deep_learning_model import LSTMAttentionModel, TransformerTimeSeriesModel, NBeatsNet
         
         # 1. Load Data & Scaler
         df_full = self.dl_model.load_and_preprocess()
@@ -103,6 +103,7 @@ class SignalGenerator:
         df_scaled = df_full.copy()
     
         # FIX: Use scaler's feature names to ensure correct order
+        valid_cols = numeric_cols
         if hasattr(scaler, 'feature_names_in_'):
             required_features = list(scaler.feature_names_in_)
             # Check if all features exist
@@ -114,6 +115,7 @@ class SignalGenerator:
             
             # Transform using exact order
             df_scaled[required_features] = scaler.transform(df_full[required_features])
+            valid_cols = required_features
         else:
             # Fallback for older sklearn (use intersection)
             valid_cols = [c for c in numeric_cols if c in getattr(scaler, 'feature_names_in_', numeric_cols)]
