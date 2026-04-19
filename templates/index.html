@@ -2782,6 +2782,31 @@
             loadGenericForecasts('nbeats', 'nbeats-forecast-container');
         }
 
+        async function parseApiJson(response, contextLabel = 'Request') {
+            const contentType = (response.headers.get('content-type') || '').toLowerCase();
+            const raw = await response.text();
+
+            if (!response.ok) {
+                const compact = (raw || '').replace(/\s+/g, ' ').trim();
+                const snippet = compact.slice(0, 180);
+                throw new Error(`${contextLabel} failed (${response.status}): ${snippet || response.statusText}`);
+            }
+
+            if (!raw) {
+                return {};
+            }
+
+            if (raw.trim().startsWith('<') || contentType.includes('text/html')) {
+                throw new Error(`${contextLabel} returned HTML instead of JSON. Check backend logs and endpoint wiring.`);
+            }
+
+            try {
+                return JSON.parse(raw);
+            } catch (err) {
+                throw new Error(`${contextLabel} returned invalid JSON: ${err.message}`);
+            }
+        }
+
         // Refactor to Generic Function to avoid duplication
         async function loadGenericForecasts(modelType, containerId) {
             const container = document.getElementById(containerId);
@@ -2797,7 +2822,7 @@
 
             try {
                 const response = await fetch(`/api/deep_forecast?model=${modelType}`);
-                const data = await response.json();
+                const data = await parseApiJson(response, `${modelType.toUpperCase()} forecast`);
 
                 container.innerHTML = ''; // Clear spinner
 
@@ -2856,7 +2881,7 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                container.innerHTML = `<div class="alert alert-danger">Failed to load forecasts.</div>`;
+                container.innerHTML = `<div class="alert alert-danger">Failed to load forecasts: ${error.message}</div>`;
             }
         }
 
@@ -3814,7 +3839,7 @@
 
             try {
                 const response = await fetch(`/api/prepare_holdout?year=${year}`);
-                const data = await response.json();
+                const data = await parseApiJson(response, 'Prepare holdout');
 
                 if (data.success) {
                     statusDiv.className = 'small text-success mt-1';
@@ -4011,7 +4036,7 @@
 
             try {
                 const response = await fetch('/api/deep_forecast?model=ensemble');
-                const data = await response.json();
+                const data = await parseApiJson(response, 'Ensemble forecast');
 
                 let predictions = Array.isArray(data) ? data : (data.predictions || []);
 
@@ -4161,7 +4186,7 @@
 
             try {
                 const response = await fetch('/api/deep_forecast?model=lstm');
-                const data = await response.json();
+                const data = await parseApiJson(response, 'Deep learning forecast');
 
                 // Handle list response directly
                 let predictions = Array.isArray(data) ? data : (data.predictions || []);

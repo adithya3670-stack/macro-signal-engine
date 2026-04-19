@@ -69,11 +69,21 @@ def api_prepare_holdout():
             'test_rows': len(test_df)
         }
         
-        # Save as Excel
+        # Save split metadata (Excel when available; CSV fallback keeps endpoint usable)
         split_df = pd.DataFrame([split_info])
         excel_path = os.path.join(holdout_dir, 'train_test_split.xlsx')
-        split_df.to_excel(excel_path, index=False)
-        print(f"[PREPARE] Saved split info: {excel_path}")
+        csv_path = os.path.join(holdout_dir, 'train_test_split.csv')
+
+        split_file = excel_path
+        try:
+            split_df.to_excel(excel_path, index=False)
+            print(f"[PREPARE] Saved split info: {excel_path}")
+        except (ModuleNotFoundError, ImportError) as e:
+            if 'openpyxl' not in str(e).lower():
+                raise
+            split_df.to_csv(csv_path, index=False)
+            split_file = csv_path
+            print(f"[PREPARE] openpyxl not installed. Saved CSV split info instead: {csv_path}")
         
         # Store for training endpoint
         _prepared_holdout['folder'] = holdout_dir
@@ -82,6 +92,7 @@ def api_prepare_holdout():
         return jsonify({
             'success': True,
             'folder': holdout_dir,
+            'split_file': split_file,
             'split_info': split_info
         })
         
