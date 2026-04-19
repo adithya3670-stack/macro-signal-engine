@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "macroeconomic-backend"
+version = "0.1.0"
+description = "MacroEconomic Flask backend"
+requires-python = ">=3.10"
+dependencies = [
+  "flask==3.0.3",
+  "pandas==2.2.3",
+  "numpy==1.26.4",
+  "requests==2.32.3",
+  "python-dotenv==1.0.1",
+  "joblib==1.4.2",
+  "scikit-learn==1.5.2",
+  "plotly==5.24.1",
+  "pandas-datareader==0.10.0",
+  "yfinance==0.2.54",
+  "gunicorn==22.0.0",
+  "openpyxl==3.1.5",
+]
+
+[project.optional-dependencies]
+train = [
+  "torch==2.5.1",
+  "xgboost==2.1.2",
+]
+research = [
+  "matplotlib==3.9.2",
+  "seaborn==0.13.2",
+]
+test = [
+  "pytest==8.3.3",
+  "pytest-cov==5.0.0",
+]
+
+[tool.setuptools.packages.find]
+include = [
+  "analysis*",
+  "backtesting*",
+  "backend*",
+  "config*",
+  "data*",
+  "routes*",
+  "services*",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

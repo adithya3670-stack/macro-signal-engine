@@ -1,0 +1,14 @@
+{
+  "start_date": "2024-01-01",
+  "end_date": "2024-09-01",
+  "initial_capital": 10000,
+  "universe": ["SP500", "Gold"],
+  "strategy_config": {
+    "top_n": 2,
+    "vol_target": 0.15,
+    "use_regime": true,
+    "forecast_horizon": "1m",
+    "use_hybrid": false,
+    "trade_threshold": 0.5
+  }
+}

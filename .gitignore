@@ -1,0 +1,77 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.venv/
+venv/
+env/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# Runtime logs and transient outputs
+*.log
+runtime_logs/
+debug_*.txt
+debug_output.txt
+debug_horizon_log.txt
+debug_log.txt
+/debug_*.py
+/reproduce_*.py
+/test_*.py
+/feature_list.csv
+
+# Local notebook / cache artifacts
+.ipynb_checkpoints/
+
+# Large model and training artifacts (source-only public repo policy)
+models/
+models_*/
+models_dl/
+MasterDl/
+SequentialDLModels/
+comboSim/
+MLprep/
+master_data/
+
+# Root-level generated model/data files
+*.pth
+*.pt
+*.pkl
+*.joblib
+*.parquet
+*.onnx
+*.h5
+*.ckpt
+*.npy
+*.npz
+
+# Data folder policy: keep only explicit lightweight templates/docs
+data/*
+!data/*.py
+!data/README.md
+!data/automation_config.example.json
+
+# Keep tiny regression fixtures for tests/examples
+!tests/fixtures/
+!tests/fixtures/**
+
+# Public snapshot output
+public_release/

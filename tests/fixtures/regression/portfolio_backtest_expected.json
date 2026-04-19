@@ -1,0 +1,48 @@
+{
+  "backtest": {
+    "metrics": {
+      "total_return": 0.24911421783967924,
+      "cagr": 0.37754913503350407,
+      "sharpe": 15.087070999906548,
+      "sortino": 49.33297487431285,
+      "max_drawdown": -0.0010000000000000573,
+      "win_rate": 0.6171428571428571,
+      "calmar": 377.54913503348246
+    },
+    "equity_len": 175,
+    "drawdown_len": 175,
+    "weights_len": 175,
+    "trades_len": 23,
+    "equity_last_equity": 12491.142178396793,
+    "equity_last_pct_return": 24.911421783967924,
+    "bench_sp500_last": 51.6557544476199,
+    "bench_gold_last": 38.52499292424274
+  },
+  "portfolio": {
+    "benchmark_name": "SP500",
+    "metrics": {
+      "total_return": 0.2491035934938266,
+      "cagr": 0.37753226294573516,
+      "sharpe": 14.86133403208268,
+      "sortino": 227.81496516240077,
+      "max_drawdown": -0.0011536086177070842,
+      "win_rate": 0.6228571428571429,
+      "calmar": 327.2619995645658
+    },
+    "benchmark_metrics": {
+      "total_return": 0.5165575444761976,
+      "cagr": 0.8215320085297246,
+      "sharpe": 22.551592979333282,
+      "sortino": 0.0,
+      "max_drawdown": 0.0,
+      "win_rate": 0.9942857142857143,
+      "calmar": 0.0
+    },
+    "equity_len": 175,
+    "benchmark_len": 175,
+    "trades_len": 35,
+    "final_balance": 12491.04,
+    "equity_last_equity": 12491.035934938267,
+    "benchmark_last_equity": 15165.575444762006
+  }
+}

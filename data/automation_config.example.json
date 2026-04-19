@@ -1,0 +1,13 @@
+{
+    "enabled": false,
+    "time": "20:30",
+    "profile_name": "",
+    "last_success": null,
+    "lock_enabled": false,
+    "lock_profile": "",
+    "lock_last_update": null,
+    "email_enabled": false,
+    "email_recipient": "",
+    "email_sender": "",
+    "email_password_env": "MACRO_AUTO_EMAIL_PASSWORD"
+}

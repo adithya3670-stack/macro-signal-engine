@@ -1,0 +1,19 @@
+{
+  "start_date": "2024-01-01",
+  "end_date": "2024-09-01",
+  "initial_capital": 10000,
+  "monthly_contribution": 0.0,
+  "custom_cashflows": [],
+  "benchmark_ticker": "SP500",
+  "universe": ["SP500", "Gold"],
+  "strategy_config": {
+    "top_n": 2,
+    "vol_target": 0.15,
+    "use_regime": true,
+    "trade_threshold": 0.005,
+    "forecast_horizon": "1m",
+    "use_hybrid": false,
+    "min_confidence": 0.5,
+    "rebalance_freq": "daily"
+  }
+}

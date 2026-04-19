@@ -1,0 +1,10 @@
+flask
+pandas
+yfinance
+pandas-datareader
+plotly
+gunicorn
+python-dotenv
+requests
+
+# Pinned lockfiles are available under requirements/*.lock.txt.

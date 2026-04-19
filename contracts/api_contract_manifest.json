@@ -1,0 +1,387 @@
+{
+  "generated_at": "2026-04-17T22:38:38.222173",
+  "required_aliases": [
+    "/api/models/snapshots",
+    "/api/models/snapshot",
+    "/api/models/restore",
+    "/api/train/forecast_stream"
+  ],
+  "routes": [
+    {
+      "path": "/api/analysis/forecast",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/analysis/predictive_correlations",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/analysis/regime_performance",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/analysis/rolling_correlations",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/automation/config",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/automation/lock",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/automation/logs",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/automation/run_now",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/backtest/models",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/backtest/models/<category>/<year>",
+      "methods": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "/api/backtest/prepare_split",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/backtest/run_holdout",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/backtest/v2/run",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/combo/folders",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/combo/results",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/combo/run",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/create_snapshot",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/dashboard",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/data/range",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/deep_forecast",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/ensembling/generate_winner_ensemble",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/ensembling/list_holdout_folders",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/ensembling/list_winner_configs",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/ensembling/load_metrics",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/ensembling/scan_folder_architectures",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/feature_data",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/holdout_folders",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/list_snapshots",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/master_update",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/minor_3d/policy_latest",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/minor_3d/rebuild",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/minor_3d/status_latest",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/model_info",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/models/restore",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/models/snapshot",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/models/snapshots",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/optimize/deep_learning_stream",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/portfolio/run",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/prepare_holdout",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/price_3d/metrics",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/price_3d/predict_latest",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/price_3d/promote_champions",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/profiles",
+      "methods": [
+        "GET",
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/profiles/<name>",
+      "methods": [
+        "DELETE",
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/refresh",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/regime/forecast_latest",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/regime/policy_latest",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/regime/predict_latest",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/regime/predictability",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/regime/rebuild",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/regime/state_latest",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/sentiment/data",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/sequential/train",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/train/deep_learning_stream",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/train/forecast_stream",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/train/master_dl",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/train/master_dl_status",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/train/master_dl_stream",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/train/price_3d_stream",
+      "methods": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/update_features",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/update_latest",
+      "methods": [
+        "POST"
+      ]
+    },
+    {
+      "path": "/api/update_price_3d_features",
+      "methods": [
+        "POST"
+      ]
+    }
+  ]
+}

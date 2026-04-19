@@ -1,0 +1,40 @@
+name: Backend CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/runtime.lock.txt -r requirements/test.lock.txt
+          pip install --index-url https://download.pytorch.org/whl/cpu torch==2.5.1
+
+      - name: Compile Health
+        run: |
+          python -m compileall -q analysis backtesting routes services data config backend app.py
+
+      - name: Import Health
+        run: |
+          python -c "from app import app; assert app is not None; print('import-ok')"
+
+      - name: API Contract Snapshot
+        run: |
+          python scripts/generate_api_contract_manifest.py --check contracts/api_contract_manifest.json
+
+      - name: Focused tests
+        run: |
+          pytest -q tests/test_api_contract_manifest.py tests/test_model_snapshot_service.py tests/test_automation_config_store.py tests/test_backtest_orchestration_service.py tests/test_startup_import_health.py tests/test_dl_decomposition.py
