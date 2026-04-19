@@ -27,6 +27,47 @@ The project emphasizes reproducible engineering:
 - `contracts/`: API contract manifests
 - `tests/`: unit/integration/regression test coverage
 
+## Product Walkthrough (From Current UI Screens)
+
+### 1. Data Management + Historical Trends
+
+The Data Collection screen is designed for two ingestion modes:
+- `Update to Latest (Smart)`: append only missing dates to your local history
+- `Reset / Full Download (2008–Present)`: full rebuild mode for clean backfills
+
+Custom extraction supports explicit `From` and `To` dates, then writes normalized
+outputs into the expected local CSV contracts under `data/`.
+
+The lower trend panel overlays key context series (for example `SP500`, `VIX`,
+and policy-rate proxies) so users can visually validate alignment before training.
+This helps catch bad joins, date gaps, and regime-shift discontinuities early.
+
+### 2. Fear & Greed, Rates, Inflation, and Labor Panels
+
+The macro dashboard presents grouped mini-panels to quickly sanity-check data health:
+- Fear & Greed proxies: momentum, strength, breadth, options, junk demand, volatility, safe-haven demand
+- Interest rates and curve state: Fed funds, 10Y yield, 10Y-3M spread
+- Inflation and prices: CPI and PPI trajectories
+- Labor and growth context: GDP growth, unemployment, nonfarm payrolls
+
+These grouped views are intended as pre-model diagnostics. If one group looks stale
+or structurally inconsistent, users should refresh or repair their upstream data
+connector before running feature generation or model training.
+
+### 3. Feature Engineering Workspace
+
+The Feature Engineering screen turns raw macro-market inputs into model-ready signals:
+- `Signal Factory` starts the engineered-feature pipeline
+- left-side controls let users select benchmark asset and feature overlays
+- the main chart compares market behavior vs engineered signals (example:
+  `SP500` vs `Liquidity_Impulse`) on synchronized timelines
+
+The intended workflow is:
+1. Ingest/refresh raw datasets.
+2. Run feature generation.
+3. Inspect signal-vs-price behavior visually.
+4. Proceed to Deep Learning Studio / Backtest Lab only after signal quality checks pass.
+
 ## Quickstart (Local)
 
 ### 1. Clone repository
@@ -59,8 +100,10 @@ Optional expanded stacks:
 
 ### 4. Provide local datasets (required)
 
-This repository does **not** fetch data from Yahoo Finance or FRED.
-You must provide local CSV inputs under `data/` before running refresh/training flows.
+This repository is **source-only** and does not ship built-in vendor connectors.
+You can connect your own ingestion pipeline from any source you choose (for example
+Yahoo Finance, FRED, paid market-data APIs, internal databases, or exported files),
+then write normalized CSV inputs under `data/` before running refresh/training flows.
 
 Required files:
 - `data/market_data.csv` with `Date, SP500, Nasdaq, DJIA, Russell2000`
@@ -72,6 +115,9 @@ Required files:
 Notes:
 - Date parsing expects a `Date` column (or first column) and daily timestamps.
 - Older raw ticker names are auto-mapped when possible (for example `^GSPC -> SP500`, `^VIX -> VIX`).
+- Keep credentials and API keys out of Git (use local env vars/secrets managers).
+- If you use third-party providers, make sure your ingestion usage/storage follows their
+  terms, licensing, and attribution requirements.
 
 ### 5. Configure automation secrets (optional)
 
