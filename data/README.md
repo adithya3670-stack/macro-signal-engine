@@ -1,11 +1,25 @@
 # Data Directory Policy
 
-This public repository keeps this directory minimal by design.
+This public repository keeps this directory source-first by design.
 
-- Tracked: lightweight configuration templates only
-- Not tracked: full runtime datasets, logs, and generated research outputs
+- Tracked:
+  - loader/source modules (`*.py`)
+  - lightweight configuration template (`automation_config.example.json`)
+  - this policy file
+- Not tracked:
+  - full runtime datasets (`*.csv`)
+  - logs and generated research outputs
 
-Use runtime endpoints/pipelines to generate local data when needed.
+## Data Inputs Are User-Managed
+
+Built-in Yahoo Finance and FRED fetch integrations are intentionally removed.
+Users must gather their own data and place CSV files in this folder, including:
+
+- `market_data.csv`
+- `macro_data.csv`
+- `sentiment_data.csv`
+- `indicators_data.csv`
+- `commodities_data.csv`
 
 ## Automation Config
 
