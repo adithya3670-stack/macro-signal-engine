@@ -74,12 +74,39 @@ The intended workflow is:
 3. Inspect signal-vs-price behavior visually.
 4. Proceed to Deep Learning Studio / Backtest Lab only after signal quality checks pass.
 
+### 4. Predictive Correlation Matrix
+
+![Predictive Correlation Matrix](Docs/Images/p4.png)
+
+This heatmap summarizes how engineered macro features (rows) relate to forward
+asset return horizons (columns). It is used to quickly identify where predictive
+signal is positive (blue) or negative (red), and where feature relevance weakens.
+
+### 5. Conditional Returns by Regime
+
+![Conditional Returns by Regime](Docs/Images/p5.png)
+
+This panel compares average returns by macro regime state (for example liquidity
+expanding vs contracting) across key assets. It is a practical check for whether
+regime labels align with expected cross-asset behavior before strategy tuning.
+
+### 6. Dynamic Signal Sensitivity
+
+![Dynamic Signal Sensitivity](Docs/Images/p6.png)
+
+This view tracks rolling correlation between a selected asset and feature over
+time (example shown: Oil vs `Liquidity_Impulse` on a 90-day window). It helps
+detect instability, structural breaks, and feature decay in live conditions.
+
 ## End-To-End Operator Guide (Start To Finish)
 
-This section is a practical runbook using the three UI screens you shared:
+This section is a practical runbook using the UI screens you shared:
 - Screen A: Data Management + Historical Trends
 - Screen B: Macro mini-panels (Fear/Greed, Rates, Inflation, Labor)
 - Screen C: Feature Engineering + Signal Factory
+- Screen D: Predictive Correlation Matrix
+- Screen E: Conditional Returns by Regime
+- Screen F: Dynamic Signal Sensitivity
 
 ### Stage 0. Local setup (one time)
 
