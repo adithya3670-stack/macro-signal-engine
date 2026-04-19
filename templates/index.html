@@ -2787,9 +2787,30 @@
             const raw = await response.text();
 
             if (!response.ok) {
-                const compact = (raw || '').replace(/\s+/g, ' ').trim();
-                const snippet = compact.slice(0, 180);
-                throw new Error(`${contextLabel} failed (${response.status}): ${snippet || response.statusText}`);
+                if (!raw || !raw.trim()) {
+                    throw new Error(`${contextLabel} failed (${response.status}): empty response body`);
+                }
+
+                const trimmed = raw.trim();
+                if (trimmed.startsWith('{') || trimmed.startsWith('[') || contentType.includes('application/json')) {
+                    let payload = null;
+                    try {
+                        payload = JSON.parse(raw);
+                    } catch (jsonErr) {
+                        payload = null;
+                    }
+                    if (payload !== null) {
+                        const message = payload.error || payload.message || JSON.stringify(payload);
+                        throw new Error(`${contextLabel} failed (${response.status}): ${String(message).slice(0, 300)}`);
+                    }
+                }
+
+                if (trimmed.startsWith('<') || contentType.includes('text/html')) {
+                    throw new Error(`${contextLabel} failed (${response.status}): server returned an HTML error page. Check backend logs and restart the app.`);
+                }
+
+                const compact = trimmed.replace(/\s+/g, ' ');
+                throw new Error(`${contextLabel} failed (${response.status}): ${compact.slice(0, 300)}`);
             }
 
             if (!raw) {

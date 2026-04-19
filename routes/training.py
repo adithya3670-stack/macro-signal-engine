@@ -47,54 +47,68 @@ def api_prepare_holdout():
         holdout_dir = os.path.join(base_path, 'models', 'holdout_dl', year)
         os.makedirs(holdout_dir, exist_ok=True)
         print(f"[PREPARE] Created holdout folder: {holdout_dir}")
-        
-        # Load data and create split info
-        dl = DLMacroModel()
-        df = dl.load_and_preprocess()
         cutoff_date = f"{year}-12-31"
-        
-        # Split data
-        train_df = df.loc[:cutoff_date]
-        test_df = df.loc[cutoff_date:]
-        
-        # Create split info
+
+        # Default split payload so endpoint stays usable even when data loaders fail.
         split_info = {
             'cutoff_year': year,
             'cutoff_date': cutoff_date,
-            'train_start': str(train_df.index.min().date()) if len(train_df) > 0 else 'N/A',
-            'train_end': str(train_df.index.max().date()) if len(train_df) > 0 else 'N/A',
-            'train_rows': len(train_df),
-            'test_start': str(test_df.index.min().date()) if len(test_df) > 0 else 'N/A',
-            'test_end': str(test_df.index.max().date()) if len(test_df) > 0 else 'N/A',
-            'test_rows': len(test_df)
+            'train_start': 'N/A',
+            'train_end': 'N/A',
+            'train_rows': 0,
+            'test_start': 'N/A',
+            'test_end': 'N/A',
+            'test_rows': 0
         }
+        warning = None
+
+        try:
+            dl = DLMacroModel()
+            df = dl.load_and_preprocess()
+
+            train_df = df.loc[:cutoff_date]
+            test_df = df.loc[cutoff_date:]
+
+            split_info.update({
+                'train_start': str(train_df.index.min().date()) if len(train_df) > 0 else 'N/A',
+                'train_end': str(train_df.index.max().date()) if len(train_df) > 0 else 'N/A',
+                'train_rows': len(train_df),
+                'test_start': str(test_df.index.min().date()) if len(test_df) > 0 else 'N/A',
+                'test_end': str(test_df.index.max().date()) if len(test_df) > 0 else 'N/A',
+                'test_rows': len(test_df)
+            })
+        except Exception as data_err:
+            warning = f"Holdout folder prepared, but split analysis failed: {data_err}"
+            print(f"[PREPARE][WARN] {warning}")
         
         # Save split metadata (Excel when available; CSV fallback keeps endpoint usable)
         split_df = pd.DataFrame([split_info])
         excel_path = os.path.join(holdout_dir, 'train_test_split.xlsx')
         csv_path = os.path.join(holdout_dir, 'train_test_split.csv')
 
-        split_file = excel_path
+        split_file = csv_path
         try:
             split_df.to_excel(excel_path, index=False)
+            split_file = excel_path
             print(f"[PREPARE] Saved split info: {excel_path}")
-        except (ModuleNotFoundError, ImportError) as e:
-            if 'openpyxl' not in str(e).lower():
-                raise
+        except Exception as e:
             split_df.to_csv(csv_path, index=False)
             split_file = csv_path
-            print(f"[PREPARE] openpyxl not installed. Saved CSV split info instead: {csv_path}")
+            print(f"[PREPARE] Excel export unavailable ({e}). Saved CSV split info instead: {csv_path}")
         
         # Store for training endpoint
         _prepared_holdout['folder'] = holdout_dir
         _prepared_holdout['year'] = year
         
-        return jsonify({
+        payload = {
             'success': True,
             'folder': holdout_dir,
             'split_file': split_file,
             'split_info': split_info
-        })
+        }
+        if warning:
+            payload['warning'] = warning
+        return jsonify(payload)
         
     except Exception as e:
         import traceback
