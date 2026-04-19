@@ -1,7 +1,9 @@
-# MacroEconomic
+# Macro Signal Engine
 
-MacroEconomic is a Flask-based research and backtesting platform for macro-aware
+Macro Signal Engine is a Flask-based research and backtesting platform for macro-aware
 portfolio simulation, holdout/model evaluation, and price-horizon forecasting.
+
+Repository: [adithya3670-stack/macro-signal-engine](https://github.com/adithya3670-stack/macro-signal-engine)
 
 This public repository follows a **source-only policy**:
 - code, tests, contracts, and lightweight fixtures are versioned
@@ -27,7 +29,14 @@ The project emphasizes reproducible engineering:
 
 ## Quickstart (Local)
 
-### 1. Create environment
+### 1. Clone repository
+
+```powershell
+git clone https://github.com/adithya3670-stack/macro-signal-engine.git
+cd macro-signal-engine
+```
+
+### 2. Create environment
 
 ```powershell
 python -m venv .venv
@@ -35,7 +44,7 @@ python -m venv .venv
 python -m pip install --upgrade pip
 ```
 
-### 2. Install dependencies
+### 3. Install dependencies
 
 Runtime + test stack:
 
@@ -48,7 +57,7 @@ Optional expanded stacks:
 - `requirements/train.lock.txt`
 - `requirements/research.lock.txt`
 
-### 3. Provide local datasets (required)
+### 4. Provide local datasets (required)
 
 This repository does **not** fetch data from Yahoo Finance or FRED.
 You must provide local CSV inputs under `data/` before running refresh/training flows.
@@ -64,7 +73,7 @@ Notes:
 - Date parsing expects a `Date` column (or first column) and daily timestamps.
 - Older raw ticker names are auto-mapped when possible (for example `^GSPC -> SP500`, `^VIX -> VIX`).
 
-### 4. Configure automation secrets (optional)
+### 5. Configure automation secrets (optional)
 
 Copy the template and set environment variables:
 
@@ -73,7 +82,7 @@ Copy-Item data/automation_config.example.json data/automation_config.json
 $env:MACRO_AUTO_EMAIL_PASSWORD="your-password"
 ```
 
-### 5. Run app
+### 6. Run app
 
 ```powershell
 python app.py
