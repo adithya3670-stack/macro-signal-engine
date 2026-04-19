@@ -5,10 +5,6 @@ from data.sentiment_data import get_sentiment_data
 from data.indicators import get_indicators_data
 from data.commodities_data import get_commodities_data
 from datetime import datetime, timedelta
-from config.settings import (
-    MARKET_DATA_FILE, MACRO_DATA_FILE, SENTIMENT_DATA_FILE, 
-    INDICATORS_DATA_FILE, COMMODITIES_DATA_FILE
-)
 
 
 def _safe_outer_join(left_df: pd.DataFrame, right_df: pd.DataFrame) -> pd.DataFrame:
@@ -24,28 +20,26 @@ def _safe_outer_join(left_df: pd.DataFrame, right_df: pd.DataFrame) -> pd.DataFr
 
 def load_and_merge_data(start_date, end_date, save_to_disk=True):
     """
-    Fetches Market, Macro, Sentiment, and Commodities data and merges them.
+    Loads user-supplied Market, Macro, Sentiment, Indicator, and Commodities data and merges them.
     """
     
-    print("Fetching Market Data...")
+    if save_to_disk:
+        print("save_to_disk=True ignored: raw input CSVs are user-managed in source-only mode.")
+
+    print("Loading Market Data...")
     market_df = get_market_data(start_date, end_date)
-    if save_to_disk: market_df.to_csv(MARKET_DATA_FILE)
     
-    print("Fetching Macro Data...")
+    print("Loading Macro Data...")
     macro_df = get_macro_data(start_date, end_date)
-    if save_to_disk: macro_df.to_csv(MACRO_DATA_FILE)
     
-    print("Fetching Sentiment Data...")
+    print("Loading Sentiment Data...")
     sentiment_df = get_sentiment_data(start_date, end_date)
-    if save_to_disk: sentiment_df.to_csv(SENTIMENT_DATA_FILE)
 
-    print("Fetching Indicators Data...")
+    print("Loading Indicators Data...")
     indicators_df = get_indicators_data(start_date, end_date)
-    if save_to_disk: indicators_df.to_csv(INDICATORS_DATA_FILE)
 
-    print("Fetching Commodities & Crypto Data...")
+    print("Loading Commodities & Crypto Data...")
     commodities_df = get_commodities_data(start_date, end_date)
-    if save_to_disk: commodities_df.to_csv(COMMODITIES_DATA_FILE)
     
     # Merge all dataframes on the index (Date)
     print("Merging Data...")

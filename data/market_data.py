@@ -1,33 +1,23 @@
-import yfinance as yf
-import pandas as pd
-from datetime import datetime, timedelta
+from __future__ import annotations
+
+from config.settings import MARKET_DATA_FILE
+from data.local_data_loader import load_user_supplied_timeseries
+
 
 def get_market_data(start_date, end_date):
     """
-    Fetches daily OHLCV data for:
-    - S&P 500 (^GSPC)
-    - Nasdaq (^IXIC)
-    - Dow Jones (^DJI)
-    - Russell 2000 (^RUT)
-    Returns a DataFrame with Close prices.
+    Load user-supplied market data from local CSV.
     """
-    tickers = ['^GSPC', '^IXIC', '^DJI', '^RUT']
-    data = yf.download(tickers, start=start_date, end=end_date, progress=False, auto_adjust=True)['Close']
-    
-    # Rename columns for clarity
-    data = data.rename(columns={
-        '^GSPC': 'SP500', 
-        '^IXIC': 'Nasdaq',
-        '^DJI': 'DJIA',
-        '^RUT': 'Russell2000'
-    })
-    
-    return data
-
-if __name__ == "__main__":
-    # Test
-    end = datetime.now()
-    start = end - timedelta(days=365*2)
-    df = get_market_data(start, end)
-    print(df.head())
-    print(df.tail())
+    return load_user_supplied_timeseries(
+        file_path=MARKET_DATA_FILE,
+        dataset_name="market_data",
+        start_date=start_date,
+        end_date=end_date,
+        required_columns=["SP500", "Nasdaq", "DJIA", "Russell2000"],
+        column_aliases={
+            "^GSPC": "SP500",
+            "^IXIC": "Nasdaq",
+            "^DJI": "DJIA",
+            "^RUT": "Russell2000",
+        },
+    )

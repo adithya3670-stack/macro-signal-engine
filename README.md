@@ -48,7 +48,23 @@ Optional expanded stacks:
 - `requirements/train.lock.txt`
 - `requirements/research.lock.txt`
 
-### 3. Configure automation secrets (optional)
+### 3. Provide local datasets (required)
+
+This repository does **not** fetch data from Yahoo Finance or FRED.
+You must provide local CSV inputs under `data/` before running refresh/training flows.
+
+Required files:
+- `data/market_data.csv` with `Date, SP500, Nasdaq, DJIA, Russell2000`
+- `data/macro_data.csv` with `Date` plus `FEDFUNDS, CPIAUCSL, PPIACO, UNRATE, PAYEMS, M2SL, T10Y3M, UMCSENT, WALCL, DGS10, A191RL1Q225SBEA`
+- `data/sentiment_data.csv` with `Date, VIX`
+- `data/indicators_data.csv` with `Date, Momentum, Strength_RSI, Breadth_Vol, Options_VIX, Junk_Bond_Demand, Volatility_Spread, Safe_Haven_Demand`
+- `data/commodities_data.csv` with `Date, Gold, Silver, Oil, Copper` (`Bitcoin` optional)
+
+Notes:
+- Date parsing expects a `Date` column (or first column) and daily timestamps.
+- Older raw ticker names are auto-mapped when possible (for example `^GSPC -> SP500`, `^VIX -> VIX`).
+
+### 4. Configure automation secrets (optional)
 
 Copy the template and set environment variables:
 
@@ -57,7 +73,7 @@ Copy-Item data/automation_config.example.json data/automation_config.json
 $env:MACRO_AUTO_EMAIL_PASSWORD="your-password"
 ```
 
-### 4. Run app
+### 5. Run app
 
 ```powershell
 python app.py

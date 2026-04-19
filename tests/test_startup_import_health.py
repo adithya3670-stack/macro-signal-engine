@@ -2,8 +2,6 @@ import pytest
 
 
 def test_app_import_and_blueprint_registration_health():
-    pytest.importorskip("pandas_datareader")
-
     from app import app
 
     assert app is not None
