@@ -68,6 +68,126 @@ The intended workflow is:
 3. Inspect signal-vs-price behavior visually.
 4. Proceed to Deep Learning Studio / Backtest Lab only after signal quality checks pass.
 
+## End-To-End Operator Guide (Start To Finish)
+
+This section is a practical runbook using the three UI screens you shared:
+- Screen A: Data Management + Historical Trends
+- Screen B: Macro mini-panels (Fear/Greed, Rates, Inflation, Labor)
+- Screen C: Feature Engineering + Signal Factory
+
+### Stage 0. Local setup (one time)
+
+1. Clone and enter the repo.
+2. Create and activate a virtual environment.
+3. Install runtime + test dependencies.
+4. Set optional device control with `MACRO_TORCH_DEVICE` (`auto`, `cpu`, `cuda`, `cuda:0`, `mps`).
+
+Use the exact commands in the Quickstart section below.
+
+### Stage 1. Prepare data contracts (required)
+
+1. Build your own ingestion connector from a provider you are allowed to use
+   (for example Yahoo Finance, FRED, paid APIs, internal DBs, or exported files).
+2. Normalize data to the required CSV schema under `data/`.
+3. Confirm daily date coverage and no future-dated rows.
+4. Keep all provider credentials/API tokens in environment variables only.
+
+If your column names differ, map them to this project contract before running the app.
+
+### Stage 2. Launch the app
+
+1. Start Flask with `python app.py`.
+2. Open the UI and begin in `Data Collection`.
+3. Confirm existing files are detected before triggering refresh operations.
+
+### Stage 3. Use Screen A (Data Collection)
+
+1. Click `Update to Latest (Smart)` for normal daily use.
+2. Use `Reset / Full Download (2008-Present)` only for full historical rebuilds.
+3. For audits, set a `From` and `To` date and click `Extract Custom Range`.
+4. Validate the lower `Historical Trends` chart:
+
+- `SP500` should not be flat-lined or full of gaps.
+- `VIX` should show event spikes.
+- policy-rate series should move stepwise over regimes.
+
+If one series is stale or shifted, fix your upstream ingestion mapping before feature generation.
+
+### Stage 4. Use Screen B (Macro Diagnostics Panels)
+
+Treat this as your data quality checkpoint before modeling.
+
+1. Fear/Greed proxies: confirm momentum/strength/breadth/options/volatility/safe-haven panels are updating.
+2. Rates block: confirm Fed funds, 10Y yield, and 10Y-3M curve are coherent.
+3. Inflation block: verify CPI/PPI continuity and update cadence.
+4. Labor/Growth block: verify GDP, unemployment, payroll series are populated and aligned.
+
+Pass criteria:
+
+- no all-zero panels
+- no obviously shifted date windows
+- no abrupt truncation in a subset of panels
+
+### Stage 5. Use Screen C (Feature Engineering)
+
+1. Open `Feature Engineering`.
+2. Click `Run Feature Engine` in the `Signal Factory` card.
+3. In controls, choose benchmark asset (for example `SP500`).
+4. Choose engineered feature (for example `Liquidity_Impulse`).
+5. Inspect the overlay chart for relationship quality:
+
+- feature should react around known stress/liquidity regimes
+- long flat segments usually mean stale or failed upstream inputs
+
+Only proceed to training once feature overlays look credible.
+
+### Stage 6. Deep Learning Studio
+
+1. Move to `DEEP LEARNING STUDIO`.
+2. Select target horizon/model setup used by your workflow.
+3. Start training or inference run.
+4. For GPU users, set `MACRO_TORCH_DEVICE` before launch:
+
+- shared default: `auto`
+- specific GPU: `cuda:0` (or another valid index)
+- fallback-safe: unavailable CUDA automatically drops to CPU
+
+This keeps training portable across different user hardware without code changes.
+
+### Stage 7. Backtest Lab (Rotation)
+
+1. Open `BACKTEST LAB (ROTATION)`.
+2. Run backtests with your chosen signal/model source.
+3. Compare metrics against prior trusted baseline windows.
+4. Investigate changes that exceed your tolerance thresholds before promoting.
+
+### Stage 8. Portfolio Management + Trailing Live Portfolio
+
+1. In `PORTFOLIO MGMT`, review allocations and risk posture from latest signals.
+2. In `TRAILING LIVE PORTFOLIO`, monitor rolling behavior and drift.
+3. Re-run Stage 3-5 checks when live behavior diverges from expected regimes.
+
+### Stage 9. Model Ensembling
+
+1. Open `MODEL ENSEMBLING`.
+2. Combine eligible model outputs under your policy rules.
+3. Re-validate combined outputs in backtest before operational use.
+
+### Stage 10. Public-source readiness checks (before sharing)
+
+1. Compile/import health:
+   `python -m compileall -q analysis backtesting routes services data config backend app.py`
+2. Contract snapshot check:
+   `python scripts/generate_api_contract_manifest.py --check contracts/api_contract_manifest.json`
+3. Test gate:
+   `pytest -q`
+4. Secret/PII sanity check:
+   ensure no passwords/tokens/personal runtime values are tracked.
+5. Artifact policy check:
+   confirm no large model/data/log artifacts are committed.
+
+If all stages pass, your repo state is ready for a public source-only release flow.
+
 ## Quickstart (Local)
 
 ### 1. Clone repository
