@@ -1,0 +1,6 @@
+scan=local_pip_audit
+mode=no_deps_disable_pip
+exit_code=1
+packages_with_vulns=4
+total_vulns=8
+notes=scan completed; nonzero exit indicates vulnerabilities were found

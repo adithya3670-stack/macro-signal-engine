@@ -280,6 +280,24 @@ Focused CI-equivalent tests:
 pytest -q tests/test_api_contract_manifest.py tests/test_model_snapshot_service.py tests/test_automation_config_store.py tests/test_backtest_orchestration_service.py tests/test_startup_import_health.py tests/test_dl_decomposition.py
 ```
 
+Local security scans (fallback when GitHub Actions billing is unavailable):
+
+```powershell
+# 1) Secret scan (blocking in CI policy)
+gitleaks git . --report-format json --report-path reports/security/gitleaks-report.json --redact
+
+# 2) Dependency vulnerability scan
+python -m pip_audit --no-deps --disable-pip `
+  -r requirements/runtime.lock.txt `
+  -r requirements/train.lock.txt `
+  -r requirements/research.lock.txt `
+  -r requirements/test.lock.txt `
+  --format json `
+  --output reports/security/pip-audit-report.json
+```
+
+Latest local scan outputs are tracked under `reports/security/`.
+
 ## Public Artifact Policy
 
 The following are excluded from Git by design:

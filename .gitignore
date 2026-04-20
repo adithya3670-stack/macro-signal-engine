@@ -75,3 +75,6 @@ data/*
 
 # Public snapshot output
 public_release/
+
+# Local helper tools (not source artifacts)
+.tools/

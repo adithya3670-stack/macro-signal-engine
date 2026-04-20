@@ -1,0 +1,4 @@
+scan=local_gitleaks_git
+exit_code=0
+findings=0
+notes=no leaks found in scanned git history
