@@ -98,6 +98,54 @@ This view tracks rolling correlation between a selected asset and feature over
 time (example shown: Oil vs `Liquidity_Impulse` on a 90-day window). It helps
 detect instability, structural breaks, and feature decay in live conditions.
 
+### 7. Daily Auto-Pilot + Runtime Logs
+
+![Daily Auto-Pilot and Runtime Logs](Docs/Images/p7.png)
+
+The automation panel controls daily orchestration with a local trigger time,
+health reminders, and one-click pipeline actions. The side log panel provides
+runtime visibility so users can confirm job status and troubleshoot failures.
+
+### 8. Sequential Training Workflow
+
+![Sequential Training Workflow](Docs/Images/p8.png)
+
+Sequential training runs year-by-year retraining to simulate rolling deployment.
+This is useful for validating whether model behavior remains stable as the data
+distribution evolves over different macro regimes.
+
+### 9. Combination Efficiency Grid Search
+
+![Combination Efficiency Grid Search](Docs/Images/p9.png)
+
+The combination optimizer tests many portfolio configurations and ranks top sets
+for multiple objectives (max return, min drawdown, and balanced). It provides a
+repeatable way to choose robust strategy settings instead of manual tuning.
+
+### 10. Model Ensembling Selection Console
+
+![Model Ensembling Selection Console](Docs/Images/p10.png)
+
+This screen compares per-asset, per-horizon model performance (LSTM, Transformer,
+N-BEATS) and supports winner-ensemble generation using a selected metric policy.
+It is the main promotion step for freezing holdout winners into deployable logic.
+
+### 11. Deep Learning Auto-Pilot Pipeline
+
+![Deep Learning Auto-Pilot Pipeline](Docs/Images/p11.png)
+
+The DL studio pipeline coordinates holdout prep, model training depth, and live
+progress for LSTM/Transformer/N-BEATS tracks plus consensus output. This keeps
+training operations centralized and auditable across model families.
+
+### 12. Portfolio Execution Results + Ledger
+
+![Portfolio Execution Results and Ledger](Docs/Images/p12.png)
+
+Portfolio Management shows equity growth versus benchmark, KPI cards, trade
+history, and current holdings/action hints. This is the primary operational
+view for evaluating whether model signals translate into risk-adjusted returns.
+
 ## End-To-End Operator Guide (Start To Finish)
 
 This section is a practical runbook using the UI screens you shared:
@@ -107,6 +155,12 @@ This section is a practical runbook using the UI screens you shared:
 - Screen D: Predictive Correlation Matrix
 - Screen E: Conditional Returns by Regime
 - Screen F: Dynamic Signal Sensitivity
+- Screen G: Daily Auto-Pilot + Runtime Logs
+- Screen H: Sequential Training Workflow
+- Screen I: Combination Efficiency Grid Search
+- Screen J: Model Ensembling Selection Console
+- Screen K: Deep Learning Auto-Pilot Pipeline
+- Screen L: Portfolio Execution Results + Ledger
 
 ### Stage 0. Local setup (one time)
 
