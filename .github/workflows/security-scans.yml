@@ -1,0 +1,75 @@
+name: Security Scans
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "15 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  gitleaks:
+    name: Gitleaks (Blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  pip-audit:
+    name: pip-audit (Non-blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pip-audit
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pip-audit
+
+      - name: Run pip-audit across lockfiles
+        id: pip_audit
+        shell: bash
+        run: |
+          set +e
+          pip-audit \
+            -r requirements/runtime.lock.txt \
+            -r requirements/train.lock.txt \
+            -r requirements/research.lock.txt \
+            -r requirements/test.lock.txt \
+            --format json \
+            --output pip-audit-report.json
+          exit_code=$?
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          if [ ! -s pip-audit-report.json ]; then
+            echo "[]" > pip-audit-report.json
+          fi
+          exit 0
+
+      - name: Upload pip-audit report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-audit-report
+          path: pip-audit-report.json
+
+      - name: pip-audit summary
+        run: |
+          echo "pip-audit completed (non-blocking) with exit code: ${{ steps.pip_audit.outputs.exit_code }}"

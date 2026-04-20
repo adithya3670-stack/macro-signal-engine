@@ -9,6 +9,15 @@ This public repository follows a **source-only policy**:
 - code, tests, contracts, and lightweight fixtures are versioned
 - large model artifacts and full runtime datasets are intentionally excluded
 
+## Disclaimer & Data Usage
+
+This repository is provided for research and educational purposes and is **not**
+financial advice, investment advice, or a solicitation to trade.
+
+If you connect third-party market or macro data providers, you are responsible
+for complying with each provider's terms of service, licensing, redistribution
+rules, and attribution requirements.
+
 ## Why This Repo Is Structured This Way
 
 The project emphasizes reproducible engineering:
