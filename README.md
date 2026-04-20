@@ -18,6 +18,9 @@ If you connect third-party market or macro data providers, you are responsible
 for complying with each provider's terms of service, licensing, redistribution
 rules, and attribution requirements.
 
+Transparency note: this repository was created fully using agentic coding by
+a maintainer with limited prior hands-on coding experience.
+
 ## Why This Repo Is Structured This Way
 
 The project emphasizes reproducible engineering:
